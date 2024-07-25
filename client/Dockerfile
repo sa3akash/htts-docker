@@ -1,16 +1,20 @@
-# Build stage
-FROM node:18-alpine AS builder
-WORKDIR /app
+FROM node:alpine as build
 
-COPY package*.json ./
-RUN npm install
+WORKDIR /usr/src/client
+
+COPY package*.json .
+
+RUN yarn --quiet --production
 
 COPY . .
-RUN npm run build
 
-# Production stage
-FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
+RUN yarn build
 
+
+# nginx
+FROM nginx:latest
 EXPOSE 3000
+COPY ./nginx /etc/nginx/conf.d
+COPY --from=build /usr/src/client/dist /usr/share/nginx/html
+
 CMD ["nginx", "-g", "daemon off;"]
