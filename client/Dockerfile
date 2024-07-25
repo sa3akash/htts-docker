@@ -13,6 +13,7 @@ RUN yarn build
 
 # nginx
 FROM nginx:latest
+
 EXPOSE 3000
 COPY ./nginx /etc/nginx/conf.d
 COPY --from=build /usr/src/client/dist /usr/share/nginx/html
