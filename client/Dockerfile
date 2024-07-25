@@ -1,21 +1,11 @@
-FROM node:alpine as build
+FROM node:alpine
 
 WORKDIR /usr/src/client
 
 COPY package*.json .
 
-RUN yarn --quiet --production
+RUN yarn
 
 COPY . .
 
-RUN npm run build  
-
-
-# nginx
-FROM nginx:latest
-
-EXPOSE 3000
-COPY ./nginx /etc/nginx/conf.d
-COPY --from=build /usr/src/client/dist /usr/share/nginx/html
-
-CMD ["nginx", "-g", "daemon off;"]
+CMD [ "yarn", "dev" ]
