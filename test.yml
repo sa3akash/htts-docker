@@ -1,0 +1,26 @@
+services:
+    helloworld:
+        container_name: helloworld
+        image: crccheck/hello-world
+        expose:
+            - 8000
+
+    nginx:
+        container_name: nginx
+        restart: unless-stopped
+        image: nginx
+        ports:
+            - 80:80
+            - 443:443
+        volumes:
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+            - ./certbot/conf:/etc/letsencrypt
+            - ./certbot/www:/var/www/certbot
+        
+    certbot:
+        image: certbot/certbot
+        container_name: certbot
+        volumes: 
+            - ./certbot/conf:/etc/letsencrypt
+            - ./certbot/www:/var/www/certbot
+        command: certonly --webroot -w /var/www/certbot --force-renewal --email sa2avroo@gmail.com -d avro.fr.to --agree-tos
