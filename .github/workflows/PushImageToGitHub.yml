@@ -18,14 +18,14 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
     
-      - name: Build and push Docker image bangla
+      - name: Build and push Docker image react client
         uses: docker/build-push-action@v4
         with:
           context: ./client
           push: true
           tags: sa2avroo/test-react:latest
 
-      - name: Build and push Docker image nodejs
+      - name: Build and push Docker image nodejs server
         uses: docker/build-push-action@v4
         with:
           context: ./server
