@@ -8,7 +8,7 @@ RUN yarn --quiet --production
 
 COPY . .
 
-RUN yarn build
+RUN npm build  
 
 
 # nginx
