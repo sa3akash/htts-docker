@@ -69,7 +69,7 @@ WORKDIR /app
 COPY --from=builder /app .  
 
 # Step 10: Expose the port your app runs on (modify if necessary)  
-EXPOSE 3000  
+EXPOSE 5000  
 
 # Step 11: Command to run your application  
 CMD ["node", "server.js"]  # Change this to your main entry file
