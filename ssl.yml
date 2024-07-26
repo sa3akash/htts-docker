@@ -1,12 +1,10 @@
-version: '3.7'
-
 services:
-  react-app:
+  app:
     image: sa2avroo/test-react:latest
     # ports:
     #   - "3000:3000"
 
-  node-api:
+  api:
     image: sa2avroo/test-node:latest
     # ports:
     #   - "5000:5000"
@@ -33,4 +31,4 @@ services:
     volumes: 
         - ./certbot/conf:/etc/letsencrypt
         - ./certbot/www:/var/www/certbot
-    command: certonly --webroot -w /var/www/certbot --force-renewal --email sa2avroo@gmail.com -d avro.fr.to -d apii.fr.to -d npm.fr.to -d www.avro.fr.to --agree-tos
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email sa2avroo@gmail.com -d avro.fr.to -d apii.fr.to -d www.avro.fr.to --agree-tos
