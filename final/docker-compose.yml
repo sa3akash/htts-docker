@@ -1,7 +1,11 @@
-version: '3.7'
+version: "3.7"
 
 services:
   app:
+    image: sa2avroo/test-react:latest
+    # ports:
+    #   - "8080:8080"
+  app2:
     image: sa2avroo/test-react:latest
     # ports:
     #   - "8080:8080"
@@ -16,20 +20,20 @@ services:
     restart: unless-stopped
     image: nginx:alpine
     ports:
-        - 80:80
-        - 443:443
+      - 80:80
+      - 443:443
     volumes:
-        - ./nginx.conf:/etc/nginx/nginx.conf
-        - ./certbot/conf:/etc/letsencrypt
-        - ./certbot/www:/var/www/certbot
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
     depends_on:
       - api
       - app
-        
+
   certbot:
     image: certbot/certbot
     container_name: certbot
-    volumes: 
-        - ./certbot/conf:/etc/letsencrypt
-        - ./certbot/www:/var/www/certbot
-    command: certonly --webroot -w /var/www/certbot --force-renewal --email sa2avroo@gmail.com -d apii.fr.to --agree-tos
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email sa2avroo@gmail.com -d apii.fr.to -d npm.fr.to --agree-tos
