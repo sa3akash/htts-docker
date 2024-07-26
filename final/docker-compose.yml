@@ -36,4 +36,15 @@ services:
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
-    command: certonly --webroot -w /var/www/certbot --force-renewal --email sa2avroo@gmail.com -d apii.fr.to -d npm.fr.to --agree-tos
+    # command: certonly --webroot -w /var/www/certbot --force-renewal --email sa2avroo@gmail.com -d apii.fr.to -d npm.fr.to --agree-tos
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --post-hook \"nginx -s reload\"; sleep 12h & wait $${!}; done'"
+
+
+
+# initial setup
+# ``` docker-compose run --entrypoint "certbot certonly --webroot -w /var/www/certbot --email your-email@example.com --agree-tos --no-eff-email -d example.com -d www.example.com" certbot ```
+
+# Renewal Check
+# You can manually check if the renewal process is working correctly by running:
+
+# ```docker-compose run --entrypoint "certbot renew --dry-run" certbot```
