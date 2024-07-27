@@ -1,9 +1,10 @@
 # Stage 1: Build
 FROM node:18-alpine as build
 
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
-COPY package.json ./
-RUN npm install
+COPY package*.json ./
+RUN npm ci
 COPY . .
 RUN npm run build
 
