@@ -31,3 +31,10 @@ jobs:
           context: ./server
           push: true
           tags: sa2avroo/test-node:latest
+
+      - name: Build and push Docker image certbot
+        uses: docker/build-push-action@v4
+        with:
+          context: ./certbot
+          push: true
+          tags: sa2avroo/certbot:latest

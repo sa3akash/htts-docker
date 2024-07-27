@@ -7,7 +7,7 @@ README.md
 !.next/static
 !.next/standalone
 .git
-
+dist
 
 # Logs
 logs
