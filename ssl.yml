@@ -3,6 +3,10 @@ services:
     image: sa2avroo/test-react:latest
     networks:
       - webnet
+  app2:
+    image: sa2avroo/standalone-nextjs:latest
+    networks:
+      - webnet
 
   api:
     image: sa2avroo/test-node:latest
