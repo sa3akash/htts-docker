@@ -1,19 +1,13 @@
 FROM certbot/certbot
 
-# Install a minimal Nginx server
-RUN apt-get update && \
-    apt-get install -y nginx && \
-    apt-get clean
+# Install additional packages or tools if needed (use apk for Alpine)
+RUN apk add --no-cache nginx
 
-# Copy the management script
+# Copy the manage-certificates.sh script into the container
 COPY manage-certificates.sh /usr/local/bin/manage-certificates.sh
 RUN chmod +x /usr/local/bin/manage-certificates.sh
 
-# Copy a minimal Nginx configuration for handling ACME challenges
+# Copy minimal Nginx config for ACME challenge
 COPY nginx-challenge.conf /etc/nginx/nginx.conf
 
-# Expose ports
-EXPOSE 80
-
-# Run the script periodically
-ENTRYPOINT ["/bin/sh", "-c", "trap exit TERM; while :; do /usr/local/bin/manage-certificates.sh; sleep 12h; done;"]
+ENTRYPOINT ["/bin/sh", "-c", "trap exit TERM; while :; do /usr/local/bin/manage-certificates.sh; sleep 24h; done;"]
