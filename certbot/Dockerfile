@@ -3,9 +3,9 @@ FROM debian:latest
 # Install necessary packages
 RUN apt-get update && \
     apt-get install -y \
-        nginx \
         certbot \
         python3-certbot-nginx \
+        nginx \
         cron \
         && apt-get clean
 
