@@ -1,49 +1,37 @@
 services:
   app:
     image: sa2avroo/test-react:latest
-    networks:
-      - webnet
+
   app2:
     image: sa2avroo/standalone-nextjs:latest
-    networks:
-      - webnet
 
   api:
     image: sa2avroo/test-node:latest
-    networks:
-      - webnet
 
   nginx:
     container_name: nginx
     restart: unless-stopped
     image: nginx:alpine
     ports:
-        - 80:80
-        - 443:443
+      - 80:80
+      - 443:443
     volumes:
-        - ./nginx.conf:/etc/nginx/nginx.conf
-        - ./certbot/conf:/etc/letsencrypt
-        - ./certbot/www:/var/www/certbot
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
     depends_on:
       - certbot
       - api
       - app
-    networks:
-      - webnet
-        
+
   certbot:
     image: sa2avroo/certbot:latest
     container_name: certbot
-    volumes: 
-        - ./certbot/conf:/etc/letsencrypt
-        - ./certbot/www:/var/www/certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
     environment:
       - CERTBOT_EMAIL=sa2avroo@gmail.com
       - CERTBOT_DOMAINS=apii.fr.to,npm.fr.to,www.avro.fr.to
       # - CERTBOT_EMAIL=${CERTBOT_EMAIL}
       # - CERTBOT_DOMAINS=${CERTBOT_DOMAINS}
-    networks:
-      - webnet
-
-networks:
-  webnet:
