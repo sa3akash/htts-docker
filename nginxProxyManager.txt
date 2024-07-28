@@ -1,0 +1,122 @@
+To ensure that both `www.domain.com` and `domain.com` work correctly and redirect HTTP requests to HTTPS using Nginx Proxy Manager, follow these steps:
+
+### Step 1: Set Up Hosts in Nginx Proxy Manager
+
+1. **Login to Nginx Proxy Manager**: Access your Nginx Proxy Manager dashboard.
+
+2. **Add Proxy Hosts**:
+   - **For `domain.com`**:
+     - Go to the “Proxy Hosts” section.
+     - Click on “Add Proxy Host”.
+     - Fill in the details:
+       - **Domain Names**: `domain.com`
+       - **Scheme**: Choose `http` (or `https` based on your backend setup).
+       - **Forward Hostname / IP**: The IP address or hostname of your backend server.
+       - **Forward Port**: The port your backend service runs on (e.g., 80 or 443).
+     - Under the SSL tab, enable “Block Common Exploits” and request a new SSL certificate with `Let's Encrypt`.
+
+   - **For `www.domain.com`**:
+     - Repeat the steps above for `www.domain.com`.
+     - Make sure to set the same settings for your backend service.
+     - Enable the SSL settings as well.
+
+### Step 2: Redirect HTTP to HTTPS
+
+1. **Edit Your Proxy Host**:
+   - In the Proxy Hosts section, click on the settings (pencil icon) for `domain.com`.
+   - Scroll to the "Advanced" tab.
+
+2. **Add Custom Nginx Configuration**:
+   In the "Advanced" tab, you’ll find a text area to add custom Nginx configuration. Add the following to redirect HTTP to HTTPS:
+
+   ```nginx
+   if ($scheme = http) {
+       return 301 https://$host$request_uri;
+   }
+   ```
+
+3. **Repeat for `www.domain.com`**:
+   If you created a separate entry for `www.domain.com`, do the same here.
+
+After setting these up, all HTTP requests to both `domain.com` and `www.domain.com` will be redirected to their HTTPS versions.
+
+### Step 3: Test Your Setup
+
+1. **Clear Your Browser Cache**: To see the changes immediately, ensure you clear your browser cache or try a private/incognito window.
+
+2. **Test Access**:
+   - Access both `http://domain.com` and `http://www.domain.com` to see if they redirect to `https://domain.com` and `https://www.domain.com`, respectively.
+   - Ensure `https://www.domain.com` works as expected.
+
+### Step 4: Updating DNS Records
+
+Make sure that both `domain.com` and `www.domain.com` have the correct DNS records set up to point to your server where Nginx Proxy Manager is running.
+
+### Final Notes
+
+- SSL certificates are essential for HTTPS, and using Let’s Encrypt will automatically handle renewals as long as your configuration is correct.
+- Ensure that your firewall rules allow traffic on port 80 (HTTP) and port 443 (HTTPS).
+
+Following these steps should allow you to effectively redirect HTTP traffic to HTTPS and ensure functionality across both `domain.com` and `www.domain.com`.
+
+
+
+
+
+
+
+
+
+==============================
+
+
+
+
+
+
+
+
+
+
+In Nginx Proxy Manager, you can handle both `domain.com` and `www.domain.com` with a single entry if you wish. Here’s how to do that:
+
+### Single Entry for Domain and www
+
+1. **Add Proxy Host**:
+   - Go to the “Proxy Hosts” section.
+   - Click on “Add Proxy Host”.
+   - Fill in the details:
+     - **Domain Names**: `domain.com,www.domain.com` (separate them with a comma).
+     - **Scheme**: `http` or `https`, depending on your backend service.
+     - **Forward Hostname / IP**: The IP address or hostname of your backend server.
+     - **Forward Port**: The port your backend service runs on (e.g., 80 or 443).
+   - Under the SSL tab, enable “Block Common Exploits” and request a new SSL certificate with `Let’s Encrypt`, ensuring that both `domain.com` and `www.domain.com` are included.
+
+2. **Redirect HTTP to HTTPS**:
+   - Once the proxy host is created, click on the pencil (edit) icon to modify your entry.
+   - Navigate to the “Advanced” tab.
+   - Enter the following code in the custom Nginx configuration section to redirect all HTTP traffic to HTTPS:
+
+   ```nginx
+   if ($scheme = http) {
+       return 301 https://$host$request_uri;
+   }
+   ```
+
+### Benefits of One Entry
+
+- **Simplification**: Using one entry combines the configuration for both domains, reducing redundancy.
+- **Easier Management**: You only need to manage one set of settings for both `www` and non-`www` versions.
+
+### Important Note
+
+- When you specify both `domain.com` and `www.domain.com` in a single entry, ensure that your DNS settings point both domains to the IP address of your Nginx Proxy Manager.
+- The SSL certificate will need to cover both domains, which Let’s Encrypt can do as long as both are specified in your configuration.
+
+### Final Check
+
+1. **Clear Browser Cache**: After making these changes, clear your browser cache or test in an incognito window.
+2. **Test Access**: Try accessing both `http://domain.com` and `http://www.domain.com` and confirm that both redirect to their HTTPS versions.
+
+By combining both domains into a single proxy host entry, you simplify the process and make management easier while still achieving the desired redirection functionality.
+
