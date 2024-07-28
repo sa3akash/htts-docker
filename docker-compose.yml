@@ -8,8 +8,12 @@ services:
 
   node-api:
     image: sa2avroo/test-node:latest
+    deploy:
+      replicas: 2
+    restart: unless-stopped
     # ports:
     #   - "5000:5000"
+    
 
   nginx:
     container_name: nginx

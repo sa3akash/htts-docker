@@ -6,7 +6,7 @@ services:
     # ports:
     #   - "8080:8080"
   app2:
-    image: sa2avroo/test-react:latest
+    image: sa2avroo/standalone-nextjs:latest
     # ports:
     #   - "8080:8080"
 

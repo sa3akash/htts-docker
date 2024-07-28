@@ -1,27 +1,28 @@
-version: '3'
+version: "3"
 
 services:
-  mern_app:
-    build: .
-    container_name: mern_app
-    ports:
-      - "5000:5000"
-    environment:
-      NODE_ENV: production
-    command: ["npm", "start"]
+  app:
+    image: sa2avroo/standalone-nextjs:latest
+    deploy:
+      replicas: 2
+      
+  api:
+    image: sa2avroo/test-node:latest
+    deploy:
+      replicas: 2
 
   nginx-certbot:
-    build: .
+    image: sa2avroo/nginx-certbot:latest
     container_name: nginx-certbot
     ports:
       - "80:80"
       - "443:443"
     environment:
-      - EMAIL=sa2avroo@gmail
-      - DOMAINS=npm.fr.to
+      - EMAIL=sa2avroo@gmail.com
+      - DOMAINS=npm.fr.to,apii.fr.to
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
       - ./nginx.conf:/etc/nginx/nginx.conf
     depends_on:
-      - mern_app
+      - app
